@@ -1,0 +1,14 @@
+{
+"routes":
+    
+      {
+       "legs":
+          [
+            {
+              "distance": { "text": "579 mi", "value": 932311 },
+              "duration": { "text": "8 hours 48 mins", "value": 31653 },
+               "travel_mode": "DRIVING"
+            }
+    ]
+    }
+}
