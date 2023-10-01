@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import {reactive,ref,computed,onMounted} from 'vue';
 import RouteInfo from '../components/RouteInfoTable.vue'
+
+import {useRouteStore} from '../stores/routes'
+
 interface RoutesResponse{
   distance:  number,
   travelTime:  number,
@@ -32,6 +35,9 @@ const formB = ref<FormWaypoints>({
      let dataLoaded = false; 
     let success = ref<boolean>(false)
 
+const routeStore = useRouteStore();
+
+
     const submitForm = async ():Promise <void> => {
       
   try {
@@ -45,7 +51,8 @@ const formB = ref<FormWaypoints>({
      
 
        routeResponse.value = responseData
-    
+       routeStore.fill(routeResponse.value)
+       console.log(routeStore.routes);
     
       success.value = true
       console.log(' response correct:', responseData)
@@ -96,7 +103,7 @@ v-if="success "
 >
 </RouteInfo>
    
-
+<p>{{ routeStore.routes }}</p>
 </template>
 
 <style scoped>
