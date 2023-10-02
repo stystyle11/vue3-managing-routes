@@ -7,6 +7,7 @@ import {useRouteStore} from '../stores/routes'
 interface RoutesResponse{
   distance:  number,
   travelTime:  number,
+  trafficDelay:number,
   violated:  boolean
 
 }
@@ -18,16 +19,19 @@ fieldB:null
 
 }
 // Define a ref to store the form data
-let routeResponse = ref<RoutesResponse>({
+let routeResponse = ref<Array<RoutesResponse>>([{
   distance: null,
   travelTime:  null,
+  trafficDelay:null,
   violated:  null,
-  
 
-
+}])
+const formDeparture = ref<FormWaypoints>({
+  fieldA:null,
+  fieldB: null,
 
 })
-const formB = ref<FormWaypoints>({
+const formDestination = ref<FormWaypoints>({
   fieldA:null,
   fieldB: null,
 
@@ -68,9 +72,19 @@ const routeStore = useRouteStore();
 
 const isInvalid = computed(() => {
   return (
-    formB.value.fieldA === null ||
-    formB.value.fieldB === null     
+    formDeparture.value.fieldA === null ||
+    formDeparture.value.fieldB === null ||
+    formDestination.value.fieldA === null ||
+    formDestination.value.fieldB === null 
+
   )
+})
+
+const toSeconds = computed(() => {
+  const currentTime = routeStore.routes[0].travelTime
+  return currentTime / 60 
+
+  
 })
 
 
@@ -81,14 +95,33 @@ const isInvalid = computed(() => {
   
     <form @submit.prevent="submitForm()">
       <div >
+        <h1>Departure:</h1>
         <label >Country:</label>
-        <input v-model="formB.fieldA" type="number" id="fieldA" >
+        <input v-model="formDeparture.fieldA" type="number" id="fieldA" >
        
       </div>
 
       <div >
         <label >State:</label>
-        <input v-model="formB.fieldB" type="number" id="fieldB" >
+        <input v-model="formDeparture.fieldB" type="number" id="fieldB" >
+      </div>
+
+      
+      <button :disabled="isInvalid" type="submit">Submit</button>
+
+    </form>
+
+    <form @submit.prevent="submitForm()">
+      <div >
+         <h1>Destination:</h1>
+        <label >Country:</label>
+        <input v-model="formDestination.fieldA" type="number" id="fieldA" >
+       
+      </div>
+
+      <div >
+        <label >State:</label>
+        <input v-model="formDestination.fieldB" type="number" id="fieldB" >
       </div>
 
       
@@ -97,13 +130,17 @@ const isInvalid = computed(() => {
     </form>
 
    <!-- <RecipientsDisplay :recipients="recipients" /> --> 
+<div v-if="success">
 <RouteInfo
-v-if="success "
-:recipients="routeResponse"
+
+:recipients="routeStore.routes"
 >
 </RouteInfo>
    
 <p>{{ routeStore.routes }}</p>
+<p>{{toSeconds}} Minutes to destination</p>
+
+</div>
 </template>
 
 <style scoped>

@@ -14,7 +14,7 @@ export const useRouteStore = defineStore("RouteStore",{
     actions:{
       async  fill(routesData){
 
-            this.routes = await routesData;
+            this.routes.push(routesData);
         },
 
 

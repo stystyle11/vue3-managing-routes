@@ -1,41 +1,42 @@
 <script setup lang="ts">
-import {reactive,ref,computed,onMounted} from 'vue';
+import {reactive,ref,computed,onMounted,defineProps} from 'vue';
 
 // Define Props //
 export interface RoutesResponse{
   distance:  number,
   travelTime:  number,
+  trafficDelay:number,
   violated:  boolean
 
 }
-//const props = defineProps<{
-  //recipients: Array<string>
-//}>()
+//const fetchedData = ref<Contact[]>(null)
 
 const props = defineProps<{
-  recipients:RoutesResponse
+  recipients:RoutesResponse[]
 }>()
 
-let routeResponse = ref (props.recipients)
-console.log('reciepíent da props',props.recipients)
+
+
+
+
+
+console.log('reciepíent da props', props.recipients)
 </script>
 
 <template>
-    <div>
-     
-         
-         <div>
-           <h1 ></h1>
-           Travel Time : {{routeResponse.travelTime}}
-         </div>
-         <div>
-           <h1 ></h1>
-           Distance: {{ routeResponse.distance }}
-         </div>
-         <div>
-         <h1 ></h1>
-           Violated: {{ routeResponse.violated }}
-        </div>
+    <div v-for="item in  props.recipients"  >
+            
+           <h1 >
+           Travel Time : {{item.travelTime}}
+          </h1>
+        
+           <h1 >
+           Distance: {{ item.distance }}
+          </h1>
+       
+         <h1 >
+           Violated: {{item.violated }}
+          </h1>
         
          
   
